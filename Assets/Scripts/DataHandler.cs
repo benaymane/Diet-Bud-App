@@ -4,16 +4,16 @@ using System.IO;
 using System.Collections;
 
 public class DataHandler : MonoBehaviour {
-    const string DATA_FILE_NAME = "calories.db", 
+    public const string CALS_FILE_NAME = "calories.db", 
         MEALS_FILE_NAME = "meals.db";
 
-    const int CALORIES_ARRAY_SIZE = 4,
+    public const int CALORIES_ARRAY_SIZE = 4,
         CALORIES_INDEX = 0,
         FAT_INDEX = 1,
         PROTEIN_INDEX = 2,
         CARBS_INDEX = 3;
 
-    int[ ] calories;
+    string[ ] calories;
     string[ ][ ] meals = new string[10][];
 
     static int meals_size = 10;
@@ -24,26 +24,26 @@ public class DataHandler : MonoBehaviour {
 
     //Make the calories file if it doesn't already exist. If it does just read it.
     public DataHandler() {
-        openToWrite( DATA_FILE_NAME, true );
+        openToWrite( CALS_FILE_NAME );
 
         //If the file doesn't exist make it.
-        if( new FileInfo( DATA_FILE_NAME ).Length == 0 ) {
+        if( new FileInfo( CALS_FILE_NAME ).Length == 0 ) {
             inFile.Write( "0\n0\n0\n0\n" );
-            calories = new int[ CALORIES_ARRAY_SIZE ] { 0, 0, 0, 0 };
+            calories = new string[ CALORIES_ARRAY_SIZE ] { "0", "0", "0", "0" };
         }
 
         close( );
 
         //if we havn't read any calorie counts yet, read them.
         if( calories == null ) {
-            calories = new int[ CALORIES_ARRAY_SIZE ];
+            calories = new string[ CALORIES_ARRAY_SIZE ];
             string line;
 
-            openToRead( DATA_FILE_NAME );
+            openToRead( CALS_FILE_NAME );
 
             for( int i = 0; i < CALORIES_ARRAY_SIZE; i++ ) {
                 line = outFile.ReadLine( );
-                calories[ i ] = Int32.Parse( line );
+                calories[ i ] = line;
             }
 
             close( );
@@ -51,45 +51,46 @@ public class DataHandler : MonoBehaviour {
 
         //Check there is a meal file.
 
-        openToWrite( MEALS_FILE_NAME, true );
+        openToWrite( MEALS_FILE_NAME );
         close( );
     }
     
     //Getters functions
     public int getCalories( ) {
-        return calories[ CALORIES_INDEX ];
+        return Int32.Parse( calories[ CALORIES_INDEX ] );
     }
 
     public int getFat( ) {
-        return calories[ FAT_INDEX ];
+        return Int32.Parse( calories[ FAT_INDEX ] );
     }
 
     public int getProtein( ) {
-        return calories[ PROTEIN_INDEX ];
+        return Int32.Parse( calories[ PROTEIN_INDEX ] );
     }
 
     public int getCarbs( ) {
-        return calories[ CARBS_INDEX ];
+        return Int32.Parse( calories[ CARBS_INDEX ] );
     }
 
     //Setters functions
-    public void setCalories( int newCalories ) {
-        calories[ CARBS_INDEX ] = newCalories;
+    public void setCalories( string newCalories ) {
+        
+        calories[ CALORIES_INDEX ] = ( getCalories( ) + Int32.Parse( newCalories ) ).ToString( );
         updateCalories( );
     }
 
-    public void setFat( int newFat ) {
-        calories[ FAT_INDEX ] = newFat;
+    public void setFat( string newFat ) {
+        calories[ FAT_INDEX ] = ( getFat( ) + Int32.Parse( newFat ) ).ToString( );
         updateCalories( );
     }
 
-    public void setProtein( int newProtein ) {
-        calories[ PROTEIN_INDEX ] = newProtein;
+    public void setProtein( string newProtein ) {
+        calories[ PROTEIN_INDEX ] = ( getProtein( ) + Int32.Parse( newProtein ) ).ToString( );
         updateCalories( );
     }
 
-    public void setCarbs( int newCarbs ) {
-        calories[ CARBS_INDEX ] = newCarbs;
+    public void setCarbs( string newCarbs ) {
+        calories[ CARBS_INDEX ] = ( getCarbs( ) + Int32.Parse( newCarbs ) ).ToString( );
         updateCalories( );
     }
 
@@ -97,12 +98,16 @@ public class DataHandler : MonoBehaviour {
      Rewrites and updates Calories file.
      */
     public void updateCalories( ) {
-        openToWrite( DATA_FILE_NAME, false );
+        File.WriteAllLines( CALS_FILE_NAME, calories );
+    }
 
-        for( int i = 0; i < CALORIES_ARRAY_SIZE; i++ )
-            inFile.WriteLine( calories[ i ] );
-
-        close( );
+    /*
+     Adds a new meal to the meal file
+     */
+    public static void addToDB( string filename, string meal ) {
+        StreamWriter file = new StreamWriter( filename, true );
+        file.WriteLine( meal );
+        file.Close( );
     }
 
     /*
@@ -118,7 +123,7 @@ public class DataHandler : MonoBehaviour {
             //read them all
             while( ( line = outFile.ReadLine( ) ) != null ) {
                 resize( );
-                meals[ curr_meals_size++ ] = line.Split( '\t' );
+                meals[ curr_meals_size++ ] = line.Split( '-' );
             }
         }
         close( );
@@ -135,8 +140,8 @@ public class DataHandler : MonoBehaviour {
     }
 
     //User to open a file for writing.
-    void openToWrite( string filename, bool rewrite ) {
-        inFile = new StreamWriter( filename, rewrite );
+    void openToWrite( string filename ) {
+        inFile = new StreamWriter( filename, true );
     }
 
     //closes which ever file that's open

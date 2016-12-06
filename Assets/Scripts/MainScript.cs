@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
@@ -23,6 +24,19 @@ public class MainScript : MonoBehaviour {
         init_meals( );
 
 	}
+
+    public void addCals( ) {
+        int value = meals_DD.value;
+
+        int serving = Int32.Parse( this.serving.text );
+        print( meals[ value ][ DataHandler.CALORIES_INDEX + 1] );
+        data.setCalories( meals[value][DataHandler.CALORIES_INDEX + 1] );
+        data.setFat( meals[ value ][ DataHandler.FAT_INDEX + 1] );
+        data.setProtein( meals[ value ][ DataHandler.PROTEIN_INDEX + 1] );
+        data.setCarbs( meals[ value ][ DataHandler.CARBS_INDEX + 1] );
+
+        init_cals( );
+    }
 
     //Iitialises the calorie count text.
     void init_cals( ) {
