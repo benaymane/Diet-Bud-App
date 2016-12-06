@@ -13,18 +13,20 @@ public class DataHandler : MonoBehaviour {
         PROTEIN_INDEX = 2,
         CARBS_INDEX = 3;
 
-    public int[ ] calories;
-    public string[ ][ ] meals;
+    int[ ] calories;
+    string[ ][ ] meals = new string[10][];
 
     static int meals_size = 10;
-    static int curr_meals_size = 0;
+    public static int curr_meals_size = 0;
 
     StreamReader outFile;
     StreamWriter inFile;
 
+    //Make the calories file if it doesn't already exist. If it does just read it.
     public DataHandler() {
-        openToWrite( DATA_FILE_NAME, false );
+        openToWrite( DATA_FILE_NAME, true );
 
+        //If the file doesn't exist make it.
         if( new FileInfo( DATA_FILE_NAME ).Length == 0 ) {
             inFile.Write( "0\n0\n0\n0\n" );
             calories = new int[ CALORIES_ARRAY_SIZE ] { 0, 0, 0, 0 };
@@ -32,7 +34,8 @@ public class DataHandler : MonoBehaviour {
 
         close( );
 
-        if( calories != null ) {
+        //if we havn't read any calorie counts yet, read them.
+        if( calories == null ) {
             calories = new int[ CALORIES_ARRAY_SIZE ];
             string line;
 
@@ -45,19 +48,14 @@ public class DataHandler : MonoBehaviour {
 
             close( );
         }
+
+        //Check there is a meal file.
+
+        openToWrite( MEALS_FILE_NAME, true );
+        close( );
     }
-
-	// Use this for initialization
-	void Start ( ) {
-
-	
-	}
-	
-	// Update is called once per frame
-	void Update ( ) {
-	
-	}
-
+    
+    //Getters functions
     public int getCalories( ) {
         return calories[ CALORIES_INDEX ];
     }
@@ -74,6 +72,7 @@ public class DataHandler : MonoBehaviour {
         return calories[ CARBS_INDEX ];
     }
 
+    //Setters functions
     public void setCalories( int newCalories ) {
         calories[ CARBS_INDEX ] = newCalories;
         updateCalories( );
@@ -94,6 +93,9 @@ public class DataHandler : MonoBehaviour {
         updateCalories( );
     }
 
+    /*
+     Rewrites and updates Calories file.
+     */
     public void updateCalories( ) {
         openToWrite( DATA_FILE_NAME, false );
 
@@ -103,26 +105,41 @@ public class DataHandler : MonoBehaviour {
         close( );
     }
 
-    public void readAllMeals( ) {
+    /*
+     Read all the meals from meal file.
+     */
+    public string[][] readAllMeals( ) {
         openToRead( MEALS_FILE_NAME );
         string line;
 
+        //If the file has meals in it
         if( new FileInfo( MEALS_FILE_NAME ).Length != 0 ) {
+
+            //read them all
             while( ( line = outFile.ReadLine( ) ) != null ) {
-                //resize( );
+                resize( );
                 meals[ curr_meals_size++ ] = line.Split( '\t' );
             }
         }
+        close( );
+        return meals;
     }
 
+    void resize( ) {
+
+    }
+
+    //Used to open a file for reading.
     void openToRead( string filename ) {
         outFile = new StreamReader( filename );
     }
 
+    //User to open a file for writing.
     void openToWrite( string filename, bool rewrite ) {
         inFile = new StreamWriter( filename, rewrite );
     }
 
+    //closes which ever file that's open
     void close( ) {
         if( inFile != null )
             inFile.Close( );
