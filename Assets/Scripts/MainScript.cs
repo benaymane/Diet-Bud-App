@@ -34,14 +34,36 @@ public class MainScript : ErrorHandler {
         if( error )
             return;
 
-        int servingValue = ( serving.text == "" ) ? 1 : Int32.Parse( this.serving.text );
+        int servingValue = 1;
+        try {
+            servingValue = ( serving.text == "" ) ? 1 : Int32.Parse( this.serving.text );
+
+        } catch( Exception e ) {
+            Console.Write( e.ToString( )  + "\n\nServing text = " + serving.text );
+            sendError( errorCode.NO_NUM_INPUT );
+        }
+
+        if( servingValue == 0 )
+            sendError( errorCode.ZERO_INPUT );
+        else if( servingValue < 0 )
+            sendError( errorCode.NEGATIVE_INPUT );
+
+        if( error )
+            return;
 
         mealValue--;
+        try {
+            data.setCalories( meals[ mealValue ][ DataHandler.CALORIES_INDEX + 1 ], servingValue );
+            data.setFat( meals[ mealValue ][ DataHandler.FAT_INDEX + 1 ], servingValue );
+            data.setProtein( meals[ mealValue ][ DataHandler.PROTEIN_INDEX + 1 ], servingValue );
+            data.setCarbs( meals[ mealValue ][ DataHandler.CARBS_INDEX + 1 ], servingValue );
 
-        data.setCalories( meals[ mealValue ][DataHandler.CALORIES_INDEX + 1], servingValue );
-        data.setFat( meals[ mealValue ][ DataHandler.FAT_INDEX + 1], servingValue );
-        data.setProtein( meals[ mealValue ][ DataHandler.PROTEIN_INDEX + 1], servingValue );
-        data.setCarbs( meals[ mealValue ][ DataHandler.CARBS_INDEX + 1], servingValue );
+        } catch (Exception e) {
+            sendError( errorCode.NO_NUM_INPUT );
+        }
+
+        if( error )
+            return;
 
         init_cals( );
 

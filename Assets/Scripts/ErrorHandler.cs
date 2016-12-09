@@ -8,9 +8,10 @@ public class ErrorHandler : MonoBehaviour {
     protected float sec = 3;
 
     protected bool error = false;
+
     protected enum errorCode { SERVING_EMPTY, NAME_EMPTY, CAL_EMPTY,
         FAT_EMPTY, PROTEIN_EMPTY, CARBS_EMPTY, NAME_CONTAINS_BAR,
-        INVALID_MEAL };
+        INVALID_MEAL,  NEGATIVE_INPUT, NO_NUM_INPUT, ZERO_INPUT};
 
     void Update( ) {
         if( sec >= 3 )
@@ -68,6 +69,18 @@ public class ErrorHandler : MonoBehaviour {
 
             case errorCode.INVALID_MEAL:
                 changeText( "Please choose a valid meal!" );
+                break;
+
+            case errorCode.NEGATIVE_INPUT:
+                changeText( "No negative numbers!" );
+                break;
+
+            case errorCode.NO_NUM_INPUT:
+                changeText( "Numbers only allowed!" );
+                break;
+
+            case errorCode.ZERO_INPUT:
+                changeText( "Serving should not be 0!" );
                 break;
         }
     }

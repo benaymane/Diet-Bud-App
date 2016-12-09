@@ -74,24 +74,43 @@ public class DataHandler : MonoBehaviour {
 
     //Setters functions
     public void setCalories( string newCalories, int serving ) {
-        
-        calories[ CALORIES_INDEX ] = ( getCalories( ) + Int32.Parse( newCalories ) * serving ).ToString( );
-        updateCalories( );
+        try {
+            calories[ CALORIES_INDEX ] = ( getCalories( ) + Int32.Parse( newCalories ) * serving ).ToString( );
+            updateCalories( );
+        } catch( Exception e ) {
+            Console.Write( e.ToString( ) );
+            throw;
+        }
     }
 
     public void setFat( string newFat, int serving ) {
-        calories[ FAT_INDEX ] = ( getFat( ) + Int32.Parse( newFat ) * serving ).ToString( );
-        updateCalories( );
+        try { 
+            calories[ FAT_INDEX ] = ( getFat( ) + Int32.Parse( newFat ) * serving ).ToString( );
+            updateCalories( );
+        } catch( Exception e ) {
+            Console.Write( e.ToString( ) );
+            throw;
+        }
     }
 
     public void setProtein( string newProtein, int serving ) {
-        calories[ PROTEIN_INDEX ] = ( getProtein( ) + Int32.Parse( newProtein ) * serving ).ToString( );
-        updateCalories( );
+        try {
+            calories[ PROTEIN_INDEX ] = ( getProtein( ) + Int32.Parse( newProtein ) * serving ).ToString( );
+            updateCalories( );
+        } catch( Exception e ) {
+            Console.Write( e.ToString( ) );
+            throw;
+        }
     }
 
     public void setCarbs( string newCarbs, int serving ) {
-        calories[ CARBS_INDEX ] = ( getCarbs( ) + Int32.Parse( newCarbs ) * serving ).ToString( );
-        updateCalories( );
+        try {
+            calories[ CARBS_INDEX ] = ( getCarbs( ) + Int32.Parse( newCarbs ) * serving ).ToString( );
+            updateCalories( );
+        } catch( Exception e ) {
+            Console.Write( e.ToString( ) );
+            throw;
+        }
     }
 
     /*

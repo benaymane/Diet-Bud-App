@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using UnityEngine.UI;
 using System.Collections;
 
@@ -7,9 +8,9 @@ public class MealsHandler : ErrorHandler {
         calories,
         fat,
         protein,
-        carbs;    
+        carbs;
 
-	public void addMeal( ) {
+    public void addMeal( ) {
         error = false;
         string meal = "";
 
@@ -27,6 +28,10 @@ public class MealsHandler : ErrorHandler {
 
         else if( carbs.text == "" )
             sendError( errorCode.CARBS_EMPTY );
+        else if( !isNumeric( ) )
+            sendError( errorCode.NO_NUM_INPUT );
+        else if( !isPositive( ) )
+            sendError( errorCode.NEGATIVE_INPUT );
 
         if( error )
             return;
@@ -41,6 +46,17 @@ public class MealsHandler : ErrorHandler {
 
         clearAll( );
         sendGood( mealName.text + " has been added!" );
+    }
+
+    bool isNumeric( ) {
+        int flush;
+        return ( Int32.TryParse( calories.text, out flush ) && Int32.TryParse( fat.text, out flush )
+            && Int32.TryParse( protein.text, out flush ) && Int32.TryParse( carbs.text, out flush ) );
+    }
+
+    bool isPositive( ) {
+        return !( calories.text.Contains( "-" ) || fat.text.Contains( "-" ) ||
+            protein.text.Contains( "-" ) || carbs.text.Contains( "-" ) );
     }
 
     void clearAll( ) {
