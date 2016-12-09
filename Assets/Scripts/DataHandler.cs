@@ -56,26 +56,26 @@ public class DataHandler : MonoBehaviour {
     }
     
     //Getters functions
-    public int getCalories( ) {
-        return Int32.Parse( calories[ CALORIES_INDEX ] );
+    public double getCalories( ) {
+        return Convert.ToDouble( calories[ CALORIES_INDEX ] );
     }
 
-    public int getFat( ) {
-        return Int32.Parse( calories[ FAT_INDEX ] );
+    public double getFat( ) {
+        return Convert.ToDouble( calories[ FAT_INDEX ] );
     }
 
-    public int getProtein( ) {
-        return Int32.Parse( calories[ PROTEIN_INDEX ] );
+    public double getProtein( ) {
+        return Convert.ToDouble( calories[ PROTEIN_INDEX ] );
     }
 
-    public int getCarbs( ) {
-        return Int32.Parse( calories[ CARBS_INDEX ] );
+    public double getCarbs( ) {
+        return Convert.ToDouble( calories[ CARBS_INDEX ] );
     }
 
     //Setters functions
     public void setCalories( string newCalories, int serving ) {
         try {
-            calories[ CALORIES_INDEX ] = ( getCalories( ) + Int32.Parse( newCalories ) * serving ).ToString( );
+            calories[ CALORIES_INDEX ] = ( getCalories( ) + Convert.ToDouble( newCalories ) * serving ).ToString( );
             updateCalories( );
         } catch( Exception e ) {
             Console.Write( e.ToString( ) );
@@ -85,7 +85,7 @@ public class DataHandler : MonoBehaviour {
 
     public void setFat( string newFat, int serving ) {
         try { 
-            calories[ FAT_INDEX ] = ( getFat( ) + Int32.Parse( newFat ) * serving ).ToString( );
+            calories[ FAT_INDEX ] = ( getFat( ) + Convert.ToDouble( newFat ) * serving ).ToString( );
             updateCalories( );
         } catch( Exception e ) {
             Console.Write( e.ToString( ) );
@@ -95,7 +95,7 @@ public class DataHandler : MonoBehaviour {
 
     public void setProtein( string newProtein, int serving ) {
         try {
-            calories[ PROTEIN_INDEX ] = ( getProtein( ) + Int32.Parse( newProtein ) * serving ).ToString( );
+            calories[ PROTEIN_INDEX ] = ( getProtein( ) + Convert.ToDouble( newProtein ) * serving ).ToString( );
             updateCalories( );
         } catch( Exception e ) {
             Console.Write( e.ToString( ) );
@@ -105,7 +105,7 @@ public class DataHandler : MonoBehaviour {
 
     public void setCarbs( string newCarbs, int serving ) {
         try {
-            calories[ CARBS_INDEX ] = ( getCarbs( ) + Int32.Parse( newCarbs ) * serving ).ToString( );
+            calories[ CARBS_INDEX ] = ( getCarbs( ) + Convert.ToDouble( newCarbs ) * serving ).ToString( );
             updateCalories( );
         } catch( Exception e ) {
             Console.Write( e.ToString( ) );

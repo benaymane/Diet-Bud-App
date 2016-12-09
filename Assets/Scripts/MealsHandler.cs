@@ -49,9 +49,10 @@ public class MealsHandler : ErrorHandler {
     }
 
     bool isNumeric( ) {
-        int flush;
-        return ( Int32.TryParse( calories.text, out flush ) && Int32.TryParse( fat.text, out flush )
-            && Int32.TryParse( protein.text, out flush ) && Int32.TryParse( carbs.text, out flush ) );
+        double flush;
+
+        return ( Double.TryParse( calories.text, out flush ) && Double.TryParse( fat.text, out flush )
+            && Double.TryParse( protein.text, out flush ) && Double.TryParse( carbs.text, out flush ) );
     }
 
     bool isPositive( ) {

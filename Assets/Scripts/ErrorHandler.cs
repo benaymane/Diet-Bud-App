@@ -11,7 +11,7 @@ public class ErrorHandler : MonoBehaviour {
 
     protected enum errorCode { SERVING_EMPTY, NAME_EMPTY, CAL_EMPTY,
         FAT_EMPTY, PROTEIN_EMPTY, CARBS_EMPTY, NAME_CONTAINS_BAR,
-        INVALID_MEAL,  NEGATIVE_INPUT, NO_NUM_INPUT, ZERO_INPUT};
+        INVALID_MEAL,  NEGATIVE_INPUT, NO_NUM_INPUT, ZERO_INPUT };
 
     void Update( ) {
         if( sec >= 3 )
