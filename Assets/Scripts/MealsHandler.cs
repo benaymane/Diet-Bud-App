@@ -2,31 +2,34 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class MealsHandler : MonoBehaviour {
+public class MealsHandler : ErrorHandler {
     public InputField mealName,
         calories,
         fat,
         protein,
-        carbs;
-
-    public GameObject status;
-    float sec = 3;
-
-    void Update( ) {
-        if( sec >= 3 )
-            status.SetActive( false );
-        else {
-            sec += Time.deltaTime;
-        }
-    }
+        carbs;    
 
 	public void addMeal( ) {
+        error = false;
         string meal = "";
 
-        if( mealName.text == "" ) {
-            changeStatus( false );
+        if( mealName.text == "" )
+            sendError( errorCode.NAME_EMPTY );
+
+        else if( mealName.text.Contains( "-" ) )
+            sendError( errorCode.NAME_CONTAINS_BAR );
+
+        else if( calories.text == "" )
+            sendError( errorCode.CAL_EMPTY );
+
+        else if( fat.text == "" )
+            sendError( errorCode.FAT_EMPTY );
+
+        else if( carbs.text == "" )
+            sendError( errorCode.CARBS_EMPTY );
+
+        if( error )
             return;
-        }
 
         meal += mealName.text + "-"
             + calories.text + "-"
@@ -36,22 +39,8 @@ public class MealsHandler : MonoBehaviour {
 
         DataHandler.addToDB( DataHandler.MEALS_FILE_NAME, meal );
 
-        changeStatus( true );
-
         clearAll( );
-    }
-
-    void changeStatus( bool status ) {
-        sec = 0;
-        this.status.SetActive( true );
-
-        if( status ) {
-            this.status.GetComponent<Text>( ).text = mealName.text + " is added!";
-            this.status.GetComponent<Text>( ).color = Color.green;
-        } else {
-            this.status.GetComponent<Text>( ).text = "Your meal wasn't added!";
-            this.status.GetComponent<Text>( ).color = Color.red;
-        }
+        sendGood( mealName.text + " has been added!" );
     }
 
     void clearAll( ) {

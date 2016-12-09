@@ -17,7 +17,7 @@ public class DataHandler : MonoBehaviour {
     string[ ][ ] meals = new string[10][];
 
     static int meals_size = 10;
-    public static int curr_meals_size = 0;
+    public int curr_meals_size = 0;
 
     StreamReader outFile;
     StreamWriter inFile;
@@ -73,24 +73,24 @@ public class DataHandler : MonoBehaviour {
     }
 
     //Setters functions
-    public void setCalories( string newCalories ) {
+    public void setCalories( string newCalories, int serving ) {
         
-        calories[ CALORIES_INDEX ] = ( getCalories( ) + Int32.Parse( newCalories ) ).ToString( );
+        calories[ CALORIES_INDEX ] = ( getCalories( ) + Int32.Parse( newCalories ) * serving ).ToString( );
         updateCalories( );
     }
 
-    public void setFat( string newFat ) {
-        calories[ FAT_INDEX ] = ( getFat( ) + Int32.Parse( newFat ) ).ToString( );
+    public void setFat( string newFat, int serving ) {
+        calories[ FAT_INDEX ] = ( getFat( ) + Int32.Parse( newFat ) * serving ).ToString( );
         updateCalories( );
     }
 
-    public void setProtein( string newProtein ) {
-        calories[ PROTEIN_INDEX ] = ( getProtein( ) + Int32.Parse( newProtein ) ).ToString( );
+    public void setProtein( string newProtein, int serving ) {
+        calories[ PROTEIN_INDEX ] = ( getProtein( ) + Int32.Parse( newProtein ) * serving ).ToString( );
         updateCalories( );
     }
 
-    public void setCarbs( string newCarbs ) {
-        calories[ CARBS_INDEX ] = ( getCarbs( ) + Int32.Parse( newCarbs ) ).ToString( );
+    public void setCarbs( string newCarbs, int serving ) {
+        calories[ CARBS_INDEX ] = ( getCarbs( ) + Int32.Parse( newCarbs ) * serving ).ToString( );
         updateCalories( );
     }
 
@@ -109,11 +109,18 @@ public class DataHandler : MonoBehaviour {
         file.WriteLine( meal );
         file.Close( );
     }
+    
+    public void resetCals( ) {
+        calories = new string[CALORIES_ARRAY_SIZE] { "0", "0", "0", "0" };
+        updateCalories( );
+    }
 
     /*
      Read all the meals from meal file.
      */
     public string[][] readAllMeals( ) {
+        
+
         openToRead( MEALS_FILE_NAME );
         string line;
 
@@ -123,7 +130,9 @@ public class DataHandler : MonoBehaviour {
             //read them all
             while( ( line = outFile.ReadLine( ) ) != null ) {
                 resize( );
-                meals[ curr_meals_size++ ] = line.Split( '-' );
+                meals[ curr_meals_size ] = line.Split( '-' );
+                print( line + " and " + curr_meals_size );
+                curr_meals_size++;
             }
         }
         close( );

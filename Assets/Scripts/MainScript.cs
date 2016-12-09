@@ -3,7 +3,7 @@ using System;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
-public class MainScript : MonoBehaviour {
+public class MainScript : ErrorHandler {
     public Text caloriesValue,
         fatValue,
         proteinValue,
@@ -22,19 +22,35 @@ public class MainScript : MonoBehaviour {
         init_cals( );
 
         init_meals( );
-
 	}
 
     public void addCals( ) {
-        int value = meals_DD.value;
+        error = false;
+        int mealValue = meals_DD.value;
 
-        int serving = Int32.Parse( this.serving.text );
-        print( meals[ value ][ DataHandler.CALORIES_INDEX + 1] );
-        data.setCalories( meals[value][DataHandler.CALORIES_INDEX + 1] );
-        data.setFat( meals[ value ][ DataHandler.FAT_INDEX + 1] );
-        data.setProtein( meals[ value ][ DataHandler.PROTEIN_INDEX + 1] );
-        data.setCarbs( meals[ value ][ DataHandler.CARBS_INDEX + 1] );
+        if( mealValue == 0 )
+            sendError( errorCode.INVALID_MEAL );
 
+        if( error )
+            return;
+
+        int servingValue = ( serving.text == "" ) ? 1 : Int32.Parse( this.serving.text );
+
+        mealValue--;
+
+        data.setCalories( meals[ mealValue ][DataHandler.CALORIES_INDEX + 1], servingValue );
+        data.setFat( meals[ mealValue ][ DataHandler.FAT_INDEX + 1], servingValue );
+        data.setProtein( meals[ mealValue ][ DataHandler.PROTEIN_INDEX + 1], servingValue );
+        data.setCarbs( meals[ mealValue ][ DataHandler.CARBS_INDEX + 1], servingValue );
+
+        init_cals( );
+
+        sendGood( meals[ mealValue ][ 0 ] + " has been counted in! " );
+    }
+
+    public void clearAll( ) {
+        data.resetCals( );
+        sendGood( "All cleared!" );
         init_cals( );
     }
 
@@ -48,8 +64,12 @@ public class MainScript : MonoBehaviour {
 
     void init_meals( ) {
         meals = data.readAllMeals( );
-
-        for( int i = 0; i < DataHandler.curr_meals_size; i++ ) {
+        
+        for( int i = 0; i < data.curr_meals_size; i++ ) {
+            if( meals [i] == null ) {
+                print( i );
+                return;
+            }
            meals_DD.options.Add( new Dropdown.OptionData( meals[ i ][ 0 ] ) );
         }
     }
