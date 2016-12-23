@@ -15,6 +15,7 @@ public class MainScript : ErrorHandler {
         carbsValue;
 
     public Dropdown meals_DD;
+    public Dropdown meals_DD_B;
 
     public InputField serving;
 
@@ -98,6 +99,7 @@ public class MainScript : ErrorHandler {
 
         for( int i = 0; i < DataHandler.myMeals.size( ); i++ ) {
            meals_DD.options.Add( new Dropdown.OptionData( DataHandler.myMeals.get( i ).getName( ) ) );
+            meals_DD_B.options.Add( new Dropdown.OptionData( DataHandler.myMeals.get( i ).getName( ) ) );
         }
     }
 }
