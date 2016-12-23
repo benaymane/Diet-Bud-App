@@ -5,7 +5,9 @@ using System.Collections.Generic;
 
 public class MainScript : ErrorHandler {
 
-    public static DataHandler data;
+    public static List<Meal> newMeals;
+
+    public DataHandler data;
 
     public Text caloriesValue,
         fatValue,
@@ -20,8 +22,18 @@ public class MainScript : ErrorHandler {
 
 	// Use this for initialization
 	void Start ( ) {
+
         if( data == null )
             data = new DataHandler( );
+
+
+        if( newMeals == null )
+            newMeals = new List<Meal>( );
+
+        if( newMeals.Count != 0 ) {
+            data.addToDB( newMeals );
+            newMeals = new List<Meal>( );
+        }
 
         init_cals( );
 
@@ -56,22 +68,14 @@ public class MainScript : ErrorHandler {
             return;
 
         mealValue--;
-        try {
-            data.setCalories( meals[ mealValue ][ DataHandler.CALORIES_INDEX + 1 ], servingValue );
-            data.setFat( meals[ mealValue ][ DataHandler.FAT_INDEX + 1 ], servingValue );
-            data.setProtein( meals[ mealValue ][ DataHandler.PROTEIN_INDEX + 1 ], servingValue );
-            data.setCarbs( meals[ mealValue ][ DataHandler.CARBS_INDEX + 1 ], servingValue );
-
-        } catch (Exception e) {
-            sendError( errorCode.NO_NUM_INPUT );
-        }
-
-        if( error )
-            return;
+        data.setCalories( DataHandler.myMeals.get( mealValue ).getCalories( ), servingValue );
+        data.setFat( DataHandler.myMeals.get( mealValue ).getFat( ), servingValue );
+        data.setProtein( DataHandler.myMeals.get( mealValue ).getProtein( ), servingValue );
+        data.setCarbs( DataHandler.myMeals.get( mealValue ).getCarbs( ), servingValue );
 
         init_cals( );
 
-        sendGood( meals[ mealValue ][ 0 ] + " has been counted in! " );
+        sendGood( DataHandler.myMeals.get( mealValue ).getName( ) + " has been counted in! " );
     }
 
     public void clearAll( ) {
@@ -89,10 +93,11 @@ public class MainScript : ErrorHandler {
     }
 
     void init_meals( ) {
-        print( "size = " + data.myMeals.size( ) );
-        print( "mmm = " + data.myMeals.print( ) );
-        for( int i = 0; i < data.myMeals.size( ); i++ ) {
-           meals_DD.options.Add( new Dropdown.OptionData( data.myMeals.get( i ).getName( ) ) );
+        print( "size = " + DataHandler.myMeals.size( ) );
+        print( "mmm = " + DataHandler.myMeals.print( ) );
+
+        for( int i = 0; i < DataHandler.myMeals.size( ); i++ ) {
+           meals_DD.options.Add( new Dropdown.OptionData( DataHandler.myMeals.get( i ).getName( ) ) );
         }
     }
 }

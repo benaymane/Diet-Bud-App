@@ -36,13 +36,8 @@ public class MealsHandler : ErrorHandler {
         if( error )
             return;
 
-        meal += mealName.text + "-"
-            + calories.text + "-"
-            + fat.text + "-"
-            + protein.text + "-"
-            + carbs.text;
-
-        DataHandler.addToDB( DataHandler.MEALS_FILE_NAME, meal );
+        MainScript.newMeals.Add( new Meal( mealName.text, calories.text, fat.text, protein.text, carbs.text ) );
+        //DataHandler.addToDB( DataHandler.MEALS_FILE_NAME, meal );
 
         clearAll( );
         sendGood( mealName.text + " has been added!" );

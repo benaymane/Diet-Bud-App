@@ -16,6 +16,10 @@ public class Meal {
     double carbs;
 
     //const
+    public Meal( ) {
+
+    }
+
     public Meal( string fullMeal ) {
         if( fullMeal == null ) {
             Console.Write( "full meal is null " );
@@ -29,6 +33,14 @@ public class Meal {
         setFat( Double.Parse( choppedMeal[ FAT_INDEX ] ) );
         setProtein( Double.Parse( choppedMeal[ PROTEIN_INDEX ] ) );
         setCarbs( Double.Parse( choppedMeal[ CARBS_INDEX ] ) );
+    }
+
+    public Meal( string name, string cal, string fat, string prot, string carb ) {
+        setName( name );
+        setCalories( Double.Parse( cal ) );
+        setFat( Double.Parse( fat ) );
+        setProtein( Double.Parse( prot ) );
+        setCarbs( Double.Parse( carb ) );
     }
 
     public Meal( string name, double cal, double fat, double prot, double carb ) {
@@ -82,13 +94,13 @@ public class Meal {
     }
 
     public string toString( ) {
-        return mealName+"-"+calories+"-"+protein+"-"+carbs;
+        return mealName+"-"+calories+"-"+fat+"-"+protein+"-"+carbs;
     }
     
 }
 
 public class MealList {
-    static List<Meal> list = new List<Meal>();
+    List<Meal> list = new List<Meal>();
 
     public void addMeal( Meal meal ) {
         Console.WriteLine( "???????" );

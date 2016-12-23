@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using System;
 using System.IO;
-using System.Collections;
+using System.Collections.Generic;
 
 public class DataHandler : MonoBehaviour {
-    public MealList myMeals = new MealList( );
+    public static MealList myMeals;
 
     public const string CALS_FILE_NAME = "calories.db", 
         MEALS_FILE_NAME = "meals.db";
@@ -56,7 +56,11 @@ public class DataHandler : MonoBehaviour {
         openToWrite( MEALS_FILE_NAME );
         close( );
 
-        readMeals( );
+        if( myMeals == null ) {
+            print( "FUUUUUUUUUUUUUUUCK" );
+            myMeals = new MealList( );
+            readMeals( );
+        }
     }
     
     //Getters functions
@@ -77,19 +81,14 @@ public class DataHandler : MonoBehaviour {
     }
 
     //Setters functions
-    public void setCalories( string newCalories, int serving ) {
-        try {
-            calories[ CALORIES_INDEX ] = ( getCalories( ) + Convert.ToDouble( newCalories ) * serving ).ToString( );
+    public void setCalories( double newCalories, int serving ) {
+            calories[ CALORIES_INDEX ] = ( getCalories( ) + newCalories * serving ).ToString( );
             updateCalories( );
-        } catch( Exception e ) {
-            Console.Write( e.ToString( ) );
-            throw;
-        }
     }
 
-    public void setFat( string newFat, int serving ) {
+    public void setFat( double newFat, int serving ) {
         try { 
-            calories[ FAT_INDEX ] = ( getFat( ) + Convert.ToDouble( newFat ) * serving ).ToString( );
+            calories[ FAT_INDEX ] = ( getFat( ) + newFat * serving ).ToString( );
             updateCalories( );
         } catch( Exception e ) {
             Console.Write( e.ToString( ) );
@@ -97,9 +96,9 @@ public class DataHandler : MonoBehaviour {
         }
     }
 
-    public void setProtein( string newProtein, int serving ) {
+    public void setProtein( double newProtein, int serving ) {
         try {
-            calories[ PROTEIN_INDEX ] = ( getProtein( ) + Convert.ToDouble( newProtein ) * serving ).ToString( );
+            calories[ PROTEIN_INDEX ] = ( getProtein( ) + newProtein * serving ).ToString( );
             updateCalories( );
         } catch( Exception e ) {
             Console.Write( e.ToString( ) );
@@ -107,9 +106,9 @@ public class DataHandler : MonoBehaviour {
         }
     }
 
-    public void setCarbs( string newCarbs, int serving ) {
+    public void setCarbs( double newCarbs, int serving ) {
         try {
-            calories[ CARBS_INDEX ] = ( getCarbs( ) + Convert.ToDouble( newCarbs ) * serving ).ToString( );
+            calories[ CARBS_INDEX ] = ( getCarbs( ) + newCarbs * serving ).ToString( );
             updateCalories( );
         } catch( Exception e ) {
             Console.Write( e.ToString( ) );
@@ -133,11 +132,22 @@ public class DataHandler : MonoBehaviour {
         file.Close( );
     }
     
-    public void addtoDB( string mealName, double cals, double fat, double prot, double carb ) {
+    public void addToDB( List<Meal> newMeals ) {
+        openToWrite( MEALS_FILE_NAME );
+
+        foreach( Meal meal in newMeals ) {
+            myMeals.addMeal( meal );
+            inFile.WriteLine( myMeals.getLastMeal( ).toString( ) );
+        }
+
+        close( );
+    }
+
+    public void addToDB( string mealName, double cals, double fat, double prot, double carb ) {
         myMeals.addMeal( new Meal( mealName, cals, fat, prot, carb ) );
 
         openToWrite( MEALS_FILE_NAME );
-        inFile.Write( myMeals.getLastMeal( ).toString( ) );
+        inFile.WriteLine( myMeals.getLastMeal( ).toString( ) );
         close( );
 
     }
