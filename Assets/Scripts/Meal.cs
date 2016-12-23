@@ -1,15 +1,40 @@
 ﻿using System.Collections.Generic;
+using System;
 
 public class Meal {
+    //consts
+    static int NAME_INDEX = 0,
+        CALORIES_INDEX = 1,
+        FAT_INDEX = 2,
+        PROTEIN_INDEX = 3,
+        CARBS_INDEX = 4;
+
     string mealName;
     double calories;
+    double fat;
     double protein;
     double carbs;
 
     //const
-    public Meal( string name, double cal, double prot, double carb ) {
+    public Meal( string fullMeal ) {
+        if( fullMeal == null ) {
+            Console.Write( "full meal is null " );
+            return;
+        }
+
+        string[] choppedMeal = fullMeal.Split( '-' );
+
+        setName( choppedMeal[NAME_INDEX] );
+        setCalories( Double.Parse( choppedMeal[ CALORIES_INDEX ] ) );
+        setFat( Double.Parse( choppedMeal[ FAT_INDEX ] ) );
+        setProtein( Double.Parse( choppedMeal[ PROTEIN_INDEX ] ) );
+        setCarbs( Double.Parse( choppedMeal[ CARBS_INDEX ] ) );
+    }
+
+    public Meal( string name, double cal, double fat, double prot, double carb ) {
         setName( name );
         setCalories( cal );
+        setFat( fat );
         setProtein( prot );
         setCarbs( carb );
     }
@@ -21,6 +46,10 @@ public class Meal {
 
     public double getCalories( ) {
         return calories;
+    }
+
+    public double getFat( ) {
+        return fat;
     }
 
     public double getProtein( ) {
@@ -40,6 +69,10 @@ public class Meal {
         this.calories = calories;
     }
 
+    public void setFat( double fat ) {
+        this.fat = fat;
+    }
+
     public void setProtein( double protein ) {
         this.protein = protein;
     }
@@ -51,16 +84,38 @@ public class Meal {
     public string toString( ) {
         return mealName+"-"+calories+"-"+protein+"-"+carbs;
     }
+    
 }
 
-public static class MealList {
-    static List<Meal> list;
+public class MealList {
+    static List<Meal> list = new List<Meal>();
 
-    public static void addMeal( Meal meal ) {
+    public void addMeal( Meal meal ) {
+        Console.WriteLine( "???????" );
+        if( meal == null ) {
+            Console.WriteLine( "meal is null?" );
+            return;
+        }
         list.Add( meal );
     }
 
-    public static void deleteMeal( int index ) {
+    public Meal get(int index ) {
+        return list[ index ];
+    }
+
+    public Meal getLastMeal( ) {
+        return list[ list.Count - 1 ];
+    }
+
+    public void deleteMeal( int index ) {
         list.RemoveAt( index );
+    }
+
+    public int size( ) {
+        return list.Count;
+    }
+
+    public string print( ) {
+        return list[ 0 ].toString();
     }
 }

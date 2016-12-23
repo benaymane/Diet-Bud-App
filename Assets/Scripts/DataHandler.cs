@@ -4,6 +4,8 @@ using System.IO;
 using System.Collections;
 
 public class DataHandler : MonoBehaviour {
+    public MealList myMeals = new MealList( );
+
     public const string CALS_FILE_NAME = "calories.db", 
         MEALS_FILE_NAME = "meals.db";
 
@@ -53,6 +55,8 @@ public class DataHandler : MonoBehaviour {
 
         openToWrite( MEALS_FILE_NAME );
         close( );
+
+        readMeals( );
     }
     
     //Getters functions
@@ -129,6 +133,16 @@ public class DataHandler : MonoBehaviour {
         file.Close( );
     }
     
+    public void addtoDB( string mealName, double cals, double fat, double prot, double carb ) {
+        myMeals.addMeal( new Meal( mealName, cals, fat, prot, carb ) );
+
+        openToWrite( MEALS_FILE_NAME );
+        inFile.Write( myMeals.getLastMeal( ).toString( ) );
+        close( );
+
+    }
+
+
     public void resetCals( ) {
         calories = new string[CALORIES_ARRAY_SIZE] { "0", "0", "0", "0" };
         updateCalories( );
@@ -136,7 +150,7 @@ public class DataHandler : MonoBehaviour {
 
     /*
      Read all the meals from meal file.
-     */
+    
     public string[][] readAllMeals( ) {
         
 
@@ -156,6 +170,29 @@ public class DataHandler : MonoBehaviour {
         }
         close( );
         return meals;
+    } */
+
+    private void readMeals( ) {
+        openToRead( MEALS_FILE_NAME );
+        string line = "?";
+
+        //If the file has meals in it
+        if( new FileInfo( MEALS_FILE_NAME ).Length != 0 ) {
+
+            //read them all
+            while( ( line = outFile.ReadLine( ) ) != null ) {
+                print( line );
+                myMeals.addMeal( new Meal( line ) );
+            }
+            
+        }
+
+        if( line == null )
+            print( "last" );
+        else
+            print( "noperino" );
+
+        close( );
     }
 
     void resize( ) {

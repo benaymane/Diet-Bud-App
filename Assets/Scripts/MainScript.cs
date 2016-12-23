@@ -4,6 +4,9 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 
 public class MainScript : ErrorHandler {
+
+    public static DataHandler data;
+
     public Text caloriesValue,
         fatValue,
         proteinValue,
@@ -15,10 +18,11 @@ public class MainScript : ErrorHandler {
 
     public string[][] meals;
 
-    private DataHandler data = new DataHandler( );
-
 	// Use this for initialization
 	void Start ( ) {
+        if( data == null )
+            data = new DataHandler( );
+
         init_cals( );
 
         init_meals( );
@@ -85,14 +89,10 @@ public class MainScript : ErrorHandler {
     }
 
     void init_meals( ) {
-        meals = data.readAllMeals( );
-        
-        for( int i = 0; i < data.curr_meals_size; i++ ) {
-            if( meals [i] == null ) {
-                print( i );
-                return;
-            }
-           meals_DD.options.Add( new Dropdown.OptionData( meals[ i ][ 0 ] ) );
+        print( "size = " + data.myMeals.size( ) );
+        print( "mmm = " + data.myMeals.print( ) );
+        for( int i = 0; i < data.myMeals.size( ); i++ ) {
+           meals_DD.options.Add( new Dropdown.OptionData( data.myMeals.get( i ).getName( ) ) );
         }
     }
 }
