@@ -6,8 +6,11 @@ using System.Collections.Generic;
 public class DataHandler : MonoBehaviour {
     public static MealList myMeals;
 
-    public const string CALS_FILE_NAME = "calories.db", 
+    /*public string CALS_FILE_NAME = "calories.db", 
         MEALS_FILE_NAME = "meals.db";
+        */
+    public string CALS_FILE_NAME = Application.persistentDataPath + "/calories.db",
+    MEALS_FILE_NAME = Application.persistentDataPath + "/meals.db";
 
     public const int CALORIES_ARRAY_SIZE = 4,
         CALORIES_INDEX = 0,

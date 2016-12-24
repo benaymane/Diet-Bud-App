@@ -145,6 +145,8 @@ public class MainScript : ErrorHandler {
         init_meals( );
 
         sendGood( name + " is GONE!" );
+
+        clearEditor( );
     }
 
     public void update( ) {
