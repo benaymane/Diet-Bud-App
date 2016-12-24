@@ -130,4 +130,21 @@ public class MealList {
     public string print( ) {
         return list[ 0 ].toString();
     }
+
+    public void removeAt( int pos ) {
+        list.RemoveAt( pos );
+    }
+
+    public void replace( int pos, Meal meal ) {
+        list[ pos ] = meal;
+    }
+
+    public string[] toStringArray( ) {
+        string[ ] arr = new string[ list.Count ];
+
+        for( int i = 0; i < arr.Length; i++)
+            arr[ i ] = list[ i ].toString( );
+
+        return arr;
+    }
 }

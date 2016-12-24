@@ -14,16 +14,19 @@ public class MainScript : ErrorHandler {
         proteinValue,
         carbsValue;
 
+    public GameObject stA, stB;
+
     public Dropdown meals_DD;
     public Dropdown meals_DD_B;
 
-    public InputField serving;
+    public InputField serving,
+        mealName, cal, fat, prot, carb;
 
     public string[][] meals;
 
 	// Use this for initialization
 	void Start ( ) {
-
+        
         if( data == null )
             data = new DataHandler( );
 
@@ -39,7 +42,12 @@ public class MainScript : ErrorHandler {
         init_cals( );
 
         init_meals( );
+
+
+
 	}
+
+    
 
     public void addCals( ) {
         error = false;
@@ -94,12 +102,107 @@ public class MainScript : ErrorHandler {
     }
 
     void init_meals( ) {
-        print( "size = " + DataHandler.myMeals.size( ) );
-        print( "mmm = " + DataHandler.myMeals.print( ) );
+        meals_DD.ClearOptions( );
+        meals_DD_B.ClearOptions( );
+
+        meals_DD.options.Add( new Dropdown.OptionData( "MEALS" ) );
+        meals_DD_B.options.Add( new Dropdown.OptionData( "PICK A MEAL" ) );
+
+        meals_DD.value = 0;
+        meals_DD_B.value = 0;
+
+        meals_DD.captionText.text = "MEALS";
+        meals_DD_B.captionText.text = "PICK A MEAL";
 
         for( int i = 0; i < DataHandler.myMeals.size( ); i++ ) {
            meals_DD.options.Add( new Dropdown.OptionData( DataHandler.myMeals.get( i ).getName( ) ) );
             meals_DD_B.options.Add( new Dropdown.OptionData( DataHandler.myMeals.get( i ).getName( ) ) );
         }
+    }
+
+    public void resetST() {
+        status = stA;
+    }
+
+    public void changeST( ) {
+        status = stB;
+    }
+    
+
+    public void deleteMeal( ) {
+        error = false;
+
+        int mealValue = meals_DD_B.value - 1;
+
+        if( mealValue == -1 )
+            sendError( errorCode.INVALID_MEAL );
+
+        if( error )
+            return;
+
+        string name = DataHandler.myMeals.get( mealValue ).getName( );
+        data.removeMeal( mealValue );
+        init_meals( );
+
+        sendGood( name + " is GONE!" );
+    }
+
+    public void update( ) {
+        error = false;
+
+        if( mealName.text == "" )
+            sendError( errorCode.NAME_EMPTY );
+
+        else if( mealName.text.Contains( "-" ) )
+            sendError( errorCode.NAME_CONTAINS_BAR );
+
+        else if( cal.text == "" )
+            sendError( errorCode.CAL_EMPTY );
+
+        else if( fat.text == "" )
+            sendError( errorCode.FAT_EMPTY );
+
+        else if( prot.text == "" )
+            sendError( errorCode.PROTEIN_EMPTY );
+
+        else if( carb.text == "" )
+            sendError( errorCode.CARBS_EMPTY );
+
+        else if( !isNumeric( ) )
+            sendError( errorCode.NO_NUM_INPUT );
+
+        else if( !isPositive( ) )
+            sendError( errorCode.NEGATIVE_INPUT );
+
+        if( error )
+            return;
+
+        //This might need modification later, if someone change meals while this changes?
+        int pos = meals_DD_B.value - 1;
+
+        DataHandler.myMeals.replace( pos, new Meal( mealName.text, cal.text, fat.text, prot.text, carb.text ) );
+        data.refreshMeals( );
+
+        sendGood( mealName.text + " updated!" );
+
+        clearEditor( );
+
+    }
+
+    void clearEditor( ) {
+        mealName.text = cal.text = fat.text = prot.text = carb.text = "";
+        meals_DD_B.value = 0;
+    }
+
+    bool isNumeric( ) {
+        double flush;
+
+        return ( Double.TryParse( cal.text, out flush ) && Double.TryParse( fat.text, out flush )
+            && Double.TryParse( prot.text, out flush ) && Double.TryParse( carb.text, out flush ) );
+    }
+
+    bool isPositive( ) {
+        return !( cal.text.Contains( "-" ) || fat.text.Contains( "-" ) ||
+            prot.text.Contains( "-" ) || carb.text.Contains( "-" ) );
     }
 }

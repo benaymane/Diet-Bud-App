@@ -57,7 +57,6 @@ public class DataHandler : MonoBehaviour {
         close( );
 
         if( myMeals == null ) {
-            print( "FUUUUUUUUUUUUUUUCK" );
             myMeals = new MealList( );
             readMeals( );
         }
@@ -191,22 +190,22 @@ public class DataHandler : MonoBehaviour {
 
             //read them all
             while( ( line = outFile.ReadLine( ) ) != null ) {
-                print( line );
+                
                 myMeals.addMeal( new Meal( line ) );
             }
             
         }
-
-        if( line == null )
-            print( "last" );
-        else
-            print( "noperino" );
-
+        
         close( );
     }
 
-    void resize( ) {
+    public void removeMeal( int pos ) {
+        myMeals.removeAt( pos );
+        File.WriteAllLines( MEALS_FILE_NAME, myMeals.toStringArray( ) );
+    }
 
+    public void refreshMeals( ) {
+        File.WriteAllLines( MEALS_FILE_NAME, myMeals.toStringArray( ) );
     }
 
     //Used to open a file for reading.

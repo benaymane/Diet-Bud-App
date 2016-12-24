@@ -10,6 +10,12 @@ public class MealsHandler : ErrorHandler {
         protein,
         carbs;
 
+    public AudioSource music;
+
+    void Start( ) {
+        music.mute = !GlobalVariables.soundOption;
+    }
+
     public void addMeal( ) {
         error = false;
         string meal = "";
@@ -26,10 +32,15 @@ public class MealsHandler : ErrorHandler {
         else if( fat.text == "" )
             sendError( errorCode.FAT_EMPTY );
 
+        else if( protein.text == "" )
+            sendError( errorCode.PROTEIN_EMPTY );
+
         else if( carbs.text == "" )
             sendError( errorCode.CARBS_EMPTY );
+
         else if( !isNumeric( ) )
             sendError( errorCode.NO_NUM_INPUT );
+
         else if( !isPositive( ) )
             sendError( errorCode.NEGATIVE_INPUT );
 
